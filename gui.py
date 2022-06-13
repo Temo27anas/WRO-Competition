@@ -1,5 +1,4 @@
 
-
 from operator import is_
 from pathlib import Path
 
@@ -10,6 +9,11 @@ import serial
 import time
 import cv2
 from PIL import Image, ImageTk
+
+
+#ask for the port number
+port = input("Enter the port number: COM")
+port = "COM" + port
 
 
 OUTPUT_PATH = Path(__file__).parent
@@ -266,7 +270,7 @@ def show_frame():
 
 ########################################################################################################################
 
-ser = serial.Serial(port = "COM5",baudrate=9600)
+ser = serial.Serial(port = port,baudrate=9600)
 
 def do_update():
     
