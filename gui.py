@@ -9,7 +9,7 @@ import serial
 import time
 import cv2
 from PIL import Image, ImageTk
-
+import pygame
 
 #ask for the port number
 port = input("Enter the port number: COM")
@@ -170,7 +170,7 @@ canvas.create_text(
 
 
 
-Heartbeat_Text = canvas.create_text(
+Heartbeat_Text = canvas.create_text( #174
     804.0,
     123.0,
     anchor="nw",
@@ -181,7 +181,7 @@ Heartbeat_Text = canvas.create_text(
 
 AmbientTemperature_Text =  canvas.create_text(
     804.0,
-    265.0,
+    225.0,
     anchor="nw",
     text="Ambient temperature :    " + str(0) + "\n",
     fill="#000000",
@@ -190,7 +190,7 @@ AmbientTemperature_Text =  canvas.create_text(
 
 BodyTemperature_Text = canvas.create_text(
     804.0,
-    407.0,
+    327.0,
     anchor="nw",
     text="Body temperature  :      " + str(0) + "\n",
     fill="#000000",
@@ -199,7 +199,7 @@ BodyTemperature_Text = canvas.create_text(
 
 Gyro_Text = canvas.create_text(
     804.0,
-    478.0,
+    378.0,
     anchor="nw",
     text="Gyro(xyz axis)  :      " + str(0) + "\n",
     fill="#000000",
@@ -208,7 +208,7 @@ Gyro_Text = canvas.create_text(
 
 Speed_Text = canvas.create_text(
     804.0,
-    549.0,
+    429.0,
     anchor="nw",
     text="Speed(m/s) :      " + str(0) + "\n",
     fill="#000000",
@@ -217,7 +217,7 @@ Speed_Text = canvas.create_text(
 
 CO2Rate_Text = canvas.create_text(
     804.0,
-    194.0,
+    174.0,
     anchor="nw",
     text="CO2 level :      " + str(0) + "\n",
     fill="#000000",
@@ -226,12 +226,60 @@ CO2Rate_Text = canvas.create_text(
 
 AmbientHumidity_Text = canvas.create_text(
     804.0,
-    336.0,
+    276.0,
     anchor="nw",
     text="Ambient Humidity :     " + str(0) + "\n",
     fill="#000000",
     font=("OpenSansRoman SemiBold", 21 * -1)
 )
+
+
+
+Heartbeat_Warning = canvas.create_text( 
+    804.0,
+    489.0,
+    anchor="nw",
+    text="\n",
+    fill="#D0342C",
+    font=("OpenSansRoman SemiBold", 21 * -1)
+)
+
+CO2_Warning = canvas.create_text( 
+    804.0,
+    509.0,
+    anchor="nw",
+    text="\n",
+    fill="#D0342C",
+    font=("OpenSansRoman SemiBold", 21 * -1)
+)
+
+TBody_Warning = canvas.create_text( 
+    804.0,
+    529.0,
+    anchor="nw",
+    text="\n",
+    fill="#D0342C",
+    font=("OpenSansRoman SemiBold", 21 * -1)
+)
+
+Gyro_Warning = canvas.create_text( 
+    804.0,
+    549.0,
+    anchor="nw",
+    text="\n",
+    fill="#D0342C",
+    font=("OpenSansRoman SemiBold", 21 * -1)
+)
+
+speed_Warning = canvas.create_text( 
+    804.0,
+    589.0,
+    anchor="nw",
+    text="\n",
+    fill="#D0342C",
+    font=("OpenSansRoman SemiBold", 21 * -1)
+)
+
 
 
 canvas.create_rectangle(
@@ -266,7 +314,10 @@ def show_frame():
     CamLabel.after(10, show_frame)
 
 
-
+def play_ringtone():
+    pygame.mixer.init()
+    pygame.mixer.music.load(relative_to_assets("ringtone.mp3"))
+    pygame.mixer.music.play()
 
 ########################################################################################################################
 
@@ -279,13 +330,57 @@ def do_update():
     data = data.split(",")
     print(data)
     if len(data) == 8:
-        canvas.itemconfig(Heartbeat_Text, text="Heartbeat sensor :      " + str(data[0]) + "\n")
-        canvas.itemconfig(AmbientTemperature_Text, text="Ambient temperature :    " + str(data[1]) + "\n")
-        canvas.itemconfig(BodyTemperature_Text, text="Body temperature  :      " + str(data[2]) + "\n")
-        canvas.itemconfig(Gyro_Text, text="Gyro(xyz axis)  :      " + str(data[3]) + "\n")
-        canvas.itemconfig(Speed_Text, text="Speed(m/s) :      " + str(data[4]) + "\n")
-        canvas.itemconfig(CO2Rate_Text, text="CO2 level :      " + str(data[5]) + "\n")
-        canvas.itemconfig(AmbientHumidity_Text, text="Ambient Humidity :     " + str(data[6]) + "\n")        
+        canvas.itemconfig(Heartbeat_Text, text="Heartbeat sensor :      " + str(data[0]) + " BPM" +"\n")
+        canvas.itemconfig(AmbientTemperature_Text, text="Ambient temperature :    " + str(data[1]) + " C" + "\n")
+        canvas.itemconfig(BodyTemperature_Text, text="Body temperature  :      " + str(data[2]) +" C" + "\n")
+        canvas.itemconfig(Gyro_Text, text="Gyro(xyz axis)  :      " + str(data[3]) +", " +str(0)+"," +str(0) + "\n")
+        canvas.itemconfig(Speed_Text, text="Speed :      " + str(data[4]) + " m/s" + "\n")
+        canvas.itemconfig(CO2Rate_Text, text="CO2 level :      " + str(data[5]) +" ppm" "\n")
+        canvas.itemconfig(AmbientHumidity_Text, text="Ambient Humidity :     " + str(data[6]) +" g.kg-1"+ "\n") 
+
+        
+        if float(data[0]) < 0.40:   
+            canvas.itemconfig(Heartbeat_Warning, text="Warning: heartbeat rate is too low !" + "\n") 
+            play_ringtone()
+        else:
+            canvas.itemconfig(Heartbeat_Warning, text="\n")
+            
+
+        if float(data[5]) > 0.5:
+            canvas.itemconfig(CO2_Warning, text="Warning: CO2 level is too high !" + "\n")
+            #play_ringtone()
+        else:
+            canvas.itemconfig(CO2_Warning, text="\n")
+        
+        if float(data[2]) > 0.7:
+            canvas.itemconfig(TBody_Warning, text="Warning: body temperature is too high !" + "\n")
+            #play_ringtone()
+        
+        elif float(data[2]) < 0.3:
+            canvas.itemconfig(TBody_Warning, text="Warning: body temperature is too low !" + "\n")
+            #play_ringtone()
+        else:
+            canvas.itemconfig(TBody_Warning, text="\n")
+        
+
+        if float(data[3]) > 0.5:
+            canvas.itemconfig(Gyro_Warning, text="Warning: The robot is not aligned" + "\n")
+            #play_ringtone()
+
+        elif float(data[3]) < -0.3:
+            canvas.itemconfig(Gyro_Warning, text="Warning: The robot is not aligned" + "\n")
+            #play_ringtone()
+
+        else:
+            canvas.itemconfig(Gyro_Warning, text="\n")
+
+        
+        if float(data[4]) < 0.8:
+            canvas.itemconfig(speed_Warning, text="Warning: The robot is not falling" + "\n")
+            #play_ringtone()
+        else:
+            canvas.itemconfig(speed_Warning, text="\n")
+
     window.after(1000, do_update)
             
 
