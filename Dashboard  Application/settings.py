@@ -72,7 +72,7 @@ button_3 = Button(
     borderwidth=0,
     bg="#008DF3",
     highlightthickness=0,
-    command=open_about,
+    command=lambda:open_about(),
     relief="flat"
 )
 button_3.place(
@@ -88,7 +88,7 @@ button_4 = Button(
     borderwidth=0,
     bg="#008DF3",
     highlightthickness=0,
-    command=open_dashboard, #open dashboard window
+    command=lambda:open_dashboard(), #open dashboard window
     relief="flat"
 )
 button_4.place(
@@ -115,7 +115,7 @@ def camindex(i):
 
 def selectcam(i):
     if i == 0:
-        return "  Selected ✅"
+        return "Selected ✅"
 
 
 canvas.create_text(
@@ -132,7 +132,7 @@ for i in range(len(listCamera)):
         271.0,
         56.0 + (i+1) * 25,
         anchor="nw",
-        text= camindex(i) + " - "+ listCamera[i] + selectcam(i) ,
+        text= camindex(i) + " - "+ listCamera[i] +"                     "+ selectcam(i) ,
         fill="#000000",
         font=("OpenSansRoman SemiBold", 21 * -1)
     )

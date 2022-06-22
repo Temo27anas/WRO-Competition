@@ -18,7 +18,7 @@ n = settings.selectedCOM
 
 #ask for the port number
 #port = input("Enter the port number: COM")
-port = "COM" + n
+port = "COM" + "6"
 
 
 OUTPUT_PATH = Path(__file__).parent
@@ -138,7 +138,7 @@ button_2 = Button(
     borderwidth=0,
     bg="#008DF3",
     highlightthickness=0,
-    command=open_settings,   #open settings window
+    command=lambda: open_settings(),   #open settings window
     relief="flat"
 )
 button_2.place(
@@ -154,7 +154,7 @@ button_3 = Button(
     borderwidth=0,
     bg="#008DF3",
     highlightthickness=0,
-    command=open_about(),
+    command=lambda: open_about(),
     relief="flat"
 )
 button_3.place(

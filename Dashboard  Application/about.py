@@ -57,7 +57,7 @@ button_2 = Button(
     borderwidth=0,
     bg="#008DF3",
     highlightthickness=0,
-    command=open_settings,
+    command=lambda: open_settings(),
     relief="flat"
 )
 button_2.place(
@@ -89,7 +89,7 @@ button_4 = Button(
     borderwidth=0,
     bg="#008DF3",
     highlightthickness=0,
-    command=open_dashboard, #open dashboard window
+    command=lambda: open_dashboard(), #open dashboard window
     relief="flat"
 )
 button_4.place(
@@ -113,7 +113,7 @@ canvas.create_text(
     500.0,
     326.0 + 50,
     anchor="nw",
-    text="Coded by : Anas Temouden - @Temo27anas ",
+    text="Code on Github: /Temo27anas ",
     fill="#000000",
     font=("OpenSansRoman SemiBold", 21 * -1)
 )
