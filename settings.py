@@ -155,18 +155,19 @@ canvas.create_text(
 
 comList = serial.tools.list_ports.comports()
 
-
+labelselectedlist = []
 
 
 def selectCOM(i):
     global selectedCOM     
     selectedCOM = comList[i].device[3]
     print("Selected COM : " + str(selectedCOM))
+    # update COM port label
+    canvas.itemconfig(labelselectedlist[i], text="Selected ✅")
     
 
 
 for i in range(len(comList)):
-    
     canvas.create_text(
         271.0,
         56.0 + (i+1) * 25 + 300,
@@ -189,11 +190,23 @@ for i in range(len(comList)):
         y=56.0 + (i+1) * 25 + 300,
         width=100.0,
         height=22.0)
+
+
+    labelselected = canvas.create_text(
+        671.0 + 130,
+        56.0 + (i+1) * 25 + 300,
+        anchor="nw",
+        text=  "",
+        fill="#000000",
+        font=("OpenSansRoman SemiBold", 21 * -1)
+    
+    )
+
+    labelselectedlist.append(labelselected)    
     
 
 
 
-    
 
 
 window2.mainloop()

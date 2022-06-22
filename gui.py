@@ -29,6 +29,8 @@ def relative_to_assets(path: str) -> Path:
     return ASSETS_PATH / Path(path)
 
 
+
+
 #Layout 
 ########################################################################################################################
 window = Tk()
@@ -49,50 +51,65 @@ canvas = Canvas(
 canvas.place(x = 0, y = 0)
 
 
+width, height = 450,450  # set the size of the frame
+cap = cv2.VideoCapture(0)
+cap.set(cv2.CAP_PROP_FRAME_WIDTH, width)
+cap.set(cv2.CAP_PROP_FRAME_HEIGHT, height)
+
+CamLabel = Label(window, height=549, width=517)
+CamLabel.place(x=261.0, y=80.0)
+
+
 ############################## Button Started ##############################################################
 
-is_on= 1 
+
+# is_on= 0 
 
 
-def camera_button_click(button, cap):
-    global photo1 
-    global is_on
-    if is_on == 1: 
-        photo1 = PhotoImage(file=relative_to_assets("button_1_stop.png"))
-        button.configure(image=photo1)
-        print("stopping....")  
-        #stop the camera
-        cap.release()
-        is_on = 0                      
-        window.update()
-    elif is_on == 0:
-        photo1 = PhotoImage(file=relative_to_assets("button_1.png"))
-        button.configure(image=photo1)
-        print("Starting....")   
-        is_on = 1
-        show_frame()
-        window.update()
+# def camera_button_click(button, cap):
+#     global photo1 
+#     global is_on
 
-        #start the camera
+#     if is_on == 1: 
+#         photo1 = PhotoImage(file=relative_to_assets("button_1_stop.png"))
+#         button.configure(image=photo1)
+#         print("stopping....")  
+#         is_on = 0    
+#       # stop the camera
+#         #cap.release()
+        
+        
+#     else:
+#         photo1 = PhotoImage(file=relative_to_assets("button_1.png"))
+#         button.configure(image=photo1)
+#         print("starting....")
+#         is_on = 1
 
 
+        
 
-button_image_1 = PhotoImage(
-    file=relative_to_assets("button_1.png"))
-button_1 = Button(
-    image=button_image_1,
-    borderwidth=0,
-    bg="#FFFFFF",
-    highlightthickness=0,
-    #command= lambda: camera_button_click(button_1, cap)
-    relief="flat"
-)
-button_1.place(
-    x=353.0,
-    y=647.0,
-    width=373.0,
-    height=87.0
-)
+        
+
+
+
+
+
+# button_image_1 = PhotoImage(
+#     file=relative_to_assets("button_1.png"))
+# button_1 = Button(
+#     image=button_image_1,
+#     borderwidth=0,
+#     bg="#FFFFFF",
+#     highlightthickness=0,
+#     command= lambda: camera_button_click(button_1, cap),
+#     relief="flat"
+# )
+# button_1.place(
+#     x=353.0,
+#     y=647.0,
+#     width=373.0,
+#     height=87.0
+# )
 
 
 ############################## Button Stopped ##############################################################
@@ -102,7 +119,9 @@ def open_settings():
     window.destroy()
     import settings
 
-
+def open_about():
+    window.destroy()
+    import about
 
 image_image_1 = PhotoImage(
     file=relative_to_assets("image_1.png"))
@@ -135,7 +154,7 @@ button_3 = Button(
     borderwidth=0,
     bg="#008DF3",
     highlightthickness=0,
-    command=lambda: print("button_3 clicked"),
+    command=open_about(),
     relief="flat"
 )
 button_3.place(
@@ -292,8 +311,6 @@ speed_Warning = canvas.create_text(
     font=("OpenSansRoman SemiBold", 21 * -1)
 )
 
-
-
 canvas.create_rectangle(
     261.0,
     80.0,
@@ -305,14 +322,6 @@ canvas.create_rectangle(
 ########################################################################################################################
 # start camera stream and get frame
 
-CamLabel = Label(window, height=549, width=517)
-CamLabel.place(x=261.0, y=80.0)
-
-
-width, height = 450,450  # set the size of the frame
-cap = cv2.VideoCapture(0)
-cap.set(cv2.CAP_PROP_FRAME_WIDTH, width)
-cap.set(cv2.CAP_PROP_FRAME_HEIGHT, height)
 
 
 def show_frame():
@@ -324,7 +333,6 @@ def show_frame():
     CamLabel.imgtk = imgtk
     CamLabel.configure(image=imgtk)
     CamLabel.after(10, show_frame)
-
 
 def play_ringtone():
     pygame.mixer.init()
@@ -340,7 +348,7 @@ def do_update():
     data = ser.readline()
     data = data.decode("utf-8")
     data = data.split(",")
-    print(data)
+    #print(data)
     if len(data) == 8:
         canvas.itemconfig(Heartbeat_Text, text="Heartbeat sensor :      " + str(data[0]) + " BPM" +"\n")
         canvas.itemconfig(AmbientTemperature_Text, text="Ambient temperature :    " + str(data[1]) + " C" + "\n")
@@ -395,9 +403,6 @@ def do_update():
 
     window.after(1000, do_update)
             
-
-        
-
 do_update()
 show_frame()
 
