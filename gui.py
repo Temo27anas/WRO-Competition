@@ -11,9 +11,14 @@ import cv2
 from PIL import Image, ImageTk
 import pygame
 
+#get port from settings.py
+import settings 
+n = settings.selectedCOM
+
+
 #ask for the port number
-port = input("Enter the port number: COM")
-port = "COM" + port
+#port = input("Enter the port number: COM")
+port = "COM" + n
 
 
 OUTPUT_PATH = Path(__file__).parent
@@ -92,6 +97,13 @@ button_1.place(
 
 ############################## Button Stopped ##############################################################
 
+#Function to distoroy current window and open new window in another file
+def open_settings():
+    window.destroy()
+    import settings
+
+
+
 image_image_1 = PhotoImage(
     file=relative_to_assets("image_1.png"))
 image_1 = canvas.create_image(
@@ -107,7 +119,7 @@ button_2 = Button(
     borderwidth=0,
     bg="#008DF3",
     highlightthickness=0,
-    command=lambda: print("button_2 clicked"),
+    command=open_settings,   #open settings window
     relief="flat"
 )
 button_2.place(
@@ -376,7 +388,7 @@ def do_update():
 
         
         if float(data[4]) < 0.8:
-            canvas.itemconfig(speed_Warning, text="Warning: The robot is not falling" + "\n")
+            canvas.itemconfig(speed_Warning, text="Warning: The robot is  falling" + "\n")
             #play_ringtone()
         else:
             canvas.itemconfig(speed_Warning, text="\n")
