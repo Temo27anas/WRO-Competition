@@ -5,6 +5,7 @@ from pathlib import Path
 # from tkinter import *
 # Explicit imports to satisfy Flake8
 from tkinter import Label, Tk, Canvas, Entry, Text, Button, PhotoImage
+from turtle import speed
 import serial
 import time
 import cv2
@@ -18,7 +19,7 @@ n = settings.selectedCOM
 
 #ask for the port number
 #port = input("Enter the port number: COM")
-port = "COM" + "6"
+port = "COM" + n
 
 
 OUTPUT_PATH = Path(__file__).parent
@@ -348,56 +349,70 @@ def do_update():
     data = ser.readline()
     data = data.decode("utf-8")
     data = data.split(",")
-    #print(data)
-    if len(data) == 8:
-        canvas.itemconfig(Heartbeat_Text, text="Heartbeat sensor :      " + str(data[0]) + " BPM" +"\n")
-        canvas.itemconfig(AmbientTemperature_Text, text="Ambient temperature :    " + str(data[1]) + " C" + "\n")
-        canvas.itemconfig(BodyTemperature_Text, text="Body temperature  :      " + str(data[2]) +" C" + "\n")
-        canvas.itemconfig(Gyro_Text, text="Gyro(xyz axis)  :      " + str(data[3]) +", " +str(0)+"," +str(0) + "\n")
-        canvas.itemconfig(Speed_Text, text="Speed :      " + str(data[4]) + " m/s" + "\n")
-        canvas.itemconfig(CO2Rate_Text, text="CO2 level :      " + str(data[5]) +" ppm" "\n")
-        canvas.itemconfig(AmbientHumidity_Text, text="Ambient Humidity :     " + str(data[6]) +" g.kg-1"+ "\n") 
+    print(len(data))
+    if len(data) == 9:
+        Heartbeat = data[0]
+        CO2= data[1]
+        AmbientTemperature = data[2]
+        BodyTemperature = "-"
+        AmbientHumidity = data[3]
+        Gyro_x = data[4]
+        Gyro_y = data[5]
+        Gyro_z = data[6]
+        Speed = data[7]
+
+
+        canvas.itemconfig(Heartbeat_Text, text="Heartbeat sensor :      " + str(Heartbeat) + " BPM" +"\n")
+        canvas.itemconfig(AmbientTemperature_Text, text="Ambient temperature :    " + str(AmbientTemperature) + " C" + "\n")
+        canvas.itemconfig(BodyTemperature_Text, text="Body temperature  :      " + "-" +" C" + "\n")
+        canvas.itemconfig(Gyro_Text, text="Gyro(xyz axis)  :      " + str(Gyro_x) +", " +str(Gyro_y)+"," +str(Gyro_z) + "\n")
+        canvas.itemconfig(Speed_Text, text="Speed :      " + str(Speed) + " m/s" + "\n")
+        canvas.itemconfig(CO2Rate_Text, text="CO2 level :      " + str(CO2) +" ppm" "\n")
+        canvas.itemconfig(AmbientHumidity_Text, text="Ambient Humidity :     " + str(AmbientHumidity) +" g.kg-1"+ "\n") 
 
         
-        if float(data[0]) < 0.40:   
-            canvas.itemconfig(Heartbeat_Warning, text="Warning: heartbeat rate is too low !" + "\n") 
+        if float(Heartbeat) < 60:   
+            canvas.itemconfig(Heartbeat_Warning, text="Warning: heartbeat rate is low !" + "\n") 
+            play_ringtone()
+        elif float(Heartbeat) > 100:
+            canvas.itemconfig(Heartbeat_Warning, text="Warning: heartbeat rate is high !" + "\n") 
             play_ringtone()
         else:
             canvas.itemconfig(Heartbeat_Warning, text="\n")
             
 
-        if float(data[5]) > 0.5:
-            canvas.itemconfig(CO2_Warning, text="Warning: CO2 level is too high !" + "\n")
-            #play_ringtone()
+        if float(CO2) > 600:
+            canvas.itemconfig(CO2_Warning, text="Warning: CO2 level is high !" + "\n")
+            play_ringtone()
+        elif float(CO2) < 400:
+            canvas.itemconfig(CO2_Warning, text="Warning: CO2 level is low !" + "\n")
+            play_ringtone()
         else:
             canvas.itemconfig(CO2_Warning, text="\n")
         
-        if float(data[2]) > 0.7:
-            canvas.itemconfig(TBody_Warning, text="Warning: body temperature is too high !" + "\n")
-            #play_ringtone()
+        # if float(data[2]) > 38:
+        #     canvas.itemconfig(TBody_Warning, text="Warning: body temperature is high !" + "\n")
+        #     #play_ringtone()
         
-        elif float(data[2]) < 0.3:
-            canvas.itemconfig(TBody_Warning, text="Warning: body temperature is too low !" + "\n")
-            #play_ringtone()
-        else:
-            canvas.itemconfig(TBody_Warning, text="\n")
+        # elif float(data[2]) < 35:
+        #     canvas.itemconfig(TBody_Warning, text="Warning: body temperature is low !" + "\n")
+        #     #play_ringtone()
+        # else:
+        #     canvas.itemconfig(TBody_Warning, text="\n")
         
 
-        if float(data[3]) > 0.5:
-            canvas.itemconfig(Gyro_Warning, text="Warning: The robot is not aligned" + "\n")
-            #play_ringtone()
-
-        elif float(data[3]) < -0.3:
-            canvas.itemconfig(Gyro_Warning, text="Warning: The robot is not aligned" + "\n")
-            #play_ringtone()
+        if float(Gyro_x) > 15 or float(Gyro_x)<-15 or float(Gyro_y)>15 or float(Gyro_y)<-15 or float(Gyro_z)>90 or float(Gyro_z)<-90:
+            canvas.itemconfig(Gyro_Warning, text="Warning: The robot is not aligned or is spining" + "\n")
+            play_ringtone()
 
         else:
             canvas.itemconfig(Gyro_Warning, text="\n")
 
         
-        if float(data[4]) < 0.8:
-            canvas.itemconfig(speed_Warning, text="Warning: The robot is  falling" + "\n")
-            #play_ringtone()
+
+        if float(Speed) > 1:
+            canvas.itemconfig(speed_Warning, text="Warning: The robot is going too fast" + "\n")
+            play_ringtone()
         else:
             canvas.itemconfig(speed_Warning, text="\n")
 

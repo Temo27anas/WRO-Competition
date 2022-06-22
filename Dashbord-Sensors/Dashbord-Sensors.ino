@@ -10,15 +10,21 @@ void loop() {
   // put your main code here, to run repeatedly:
   // Prdouble Temperature
   
- double Heartbeat = ((float) rand()/ RAND_MAX) ;
- double CO2 = ((float) rand()/ RAND_MAX) ;
- double AmbientT= ((float) rand()/ RAND_MAX) ;
- double AmbientH= ((float) rand()/ RAND_MAX) ;
- double BodyT= ((float) rand()/ RAND_MAX) ;
- double Gyro= ((float) rand()/ RAND_MAX) ;
- double Speed= ((float) rand()/ RAND_MAX) ;
+  //---------Random Data-----------
+  double Heartbeat  = 80;
+  //pulse_sensor.getBeatsPerMinute(); ;
+  double CO2 = 534 ;
+  double AmbientT= 24 ;
+  double AmbientH= 56;
+  double GyroX= 0.1;
+  double GyroY= 0.1;
+  double GyroZ= 0.1;
+  double Speed= 0.9;
 
 
+  //--------------BPM-----------------------
+  
+  //----------------Send Data----------------
   Serial.print(Heartbeat);
   Serial.print(",");
   Serial.print(CO2);
@@ -27,20 +33,21 @@ void loop() {
   Serial.print(",");
   Serial.print(AmbientH);
   Serial.print(",");
-  Serial.print(BodyT);
+  Serial.print(GyroX);
   Serial.print(",");
-  Serial.print(Gyro);
+  Serial.print(GyroY);
+  Serial.print(",");
+  Serial.print(GyroZ);
   Serial.print(",");
   Serial.print(Speed);
   Serial.print(",");
-
   
-
-
- //*******************************************************
-
+  
+  
+  
+  
   Serial.println();
-
+  delay(200);
 
 
 }

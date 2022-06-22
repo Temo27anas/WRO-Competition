@@ -132,7 +132,7 @@ for i in range(len(listCamera)):
         271.0,
         56.0 + (i+1) * 25,
         anchor="nw",
-        text= camindex(i) + " - "+ listCamera[i] +"                     "+ selectcam(i) ,
+        text= camindex(i) + " - "+ listCamera[i] +"                                           "+ str(selectcam(i)) ,
         fill="#000000",
         font=("OpenSansRoman SemiBold", 21 * -1)
     )
@@ -186,14 +186,14 @@ for i in range(len(comList)):
         bg="#4CAF50"
     )
     button.place(
-        x=671.0,
+        x=750.0+60,
         y=56.0 + (i+1) * 25 + 300,
         width=100.0,
         height=22.0)
 
 
     labelselected = canvas.create_text(
-        671.0 + 130,
+        750.0 + 190,
         56.0 + (i+1) * 25 + 300,
         anchor="nw",
         text=  "",

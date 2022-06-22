@@ -102,34 +102,49 @@ button_4.place(
 
 canvas.create_text(
     500.0,
-    326.0,
+    250.0,
     anchor="nw",
     text="About :",
     fill="#000000",
     font=("OpenSansRoman SemiBold", 31 * -1)
 )
-
 canvas.create_text(
     500.0,
-    326.0 + 50,
+    250.0 + 50,
     anchor="nw",
-    text="Code on Github: /Temo27anas ",
+    text="Taipan's Pilot Application",
     fill="#000000",
     font=("OpenSansRoman SemiBold", 21 * -1)
 )
 
 canvas.create_text(
     500.0,
-    326.0 + 100,
+    250.0 + 100,
     anchor="nw",
     text="AUI Mechatronics Team - WRO 2022 ",
     fill="#000000",
     font=("OpenSansRoman SemiBold", 21 * -1)
 )
+canvas.create_text(
+    500.0,
+    250.0 + 150,
+    anchor="nw",
+    text="Github: @Temo27anas ",
+    fill="#000000",
+    font=("OpenSansRoman SemiBold", 21 * -1)
+)
 
 canvas.create_text(
     500.0,
-    326.0 + 150,
+    250.0 + 200,
+    anchor="nw",
+    text="Version: 1.8",
+    fill="#000000",
+    font=("OpenSansRoman SemiBold", 21 * -1)
+)
+canvas.create_text(
+    500.0,
+    250.0 + 250,
     anchor="nw",
     text="Copyright © 2022",
     fill="#000000",
