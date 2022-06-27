@@ -25,10 +25,7 @@ void setup() {
   servoL.attach(5);
   grip_servo.attach(7);
   rot_servo.attach(8);
-  mServo1.attach(4);
-  mServo2.attach(1);
-  mServo3.attach(2);
-  mServo4.attach(3);
+  
 
   
   grip_servo.write(90);
@@ -37,20 +34,38 @@ void setup() {
   Serial.begin(9600);
 }
 
-void openStbs(){
+void openStbs(){ //Open stablaziers
+  mServo1.attach(3);
+  mServo2.attach(11);
+  mServo3.attach(12);
+  mServo4.attach(2);
+  delay(200);
   mServo1.write(180);
   mServo2.write(180);
   mServo3.write(180);
   mServo4.write(180);
   delay(500);
+  mServo1.detach();
+  mServo2.detach();
+  mServo3.detach();
+  mServo4.detach();
 }
 
-void closeStbs(){
-  mServo1.write(0);
-  mServo2.write(0);
-  mServo3.write(0);
-  mServo4.write(0);
+void closeStbs(){ //Close Stabliziers
+  mServo1.attach(3);
+  mServo2.attach(11);
+  mServo3.attach(12);
+  mServo4.attach(2);
+  delay(200);
+  mServo1.write(90);
+  mServo2.write(90);
+  mServo3.write(90);
+  mServo4.write(90);
   delay(500);
+  mServo1.detach();
+  mServo2.detach();
+  mServo3.detach();
+  mServo4.detach();
 }
 
 
@@ -58,7 +73,7 @@ void loop() {
 
   char byte=0;
   while (true){
-    Serial.readBytes(&byte, 1);
+    Serial.readBytes(&byte, 1); //Read keyboard charachter
     if(byte== 'q'){
       servoR.write(180);
       delay(35);
@@ -69,14 +84,24 @@ void loop() {
       delay(35);
       byte=0;
     }
-    if(byte=='z'){
+    if(byte=='s'){
       servoL.write(0);
-      delay(100);
+      delay(35);
       byte=0;
     }
-    if(byte=='s'){
+    if(byte=='z'){
       servoL.write(180);
-      delay(100);
+      delay(35);
+      byte=0;
+    }
+    if(byte=='a'){
+      openStbs();
+      Serial.println("Open stablizers");
+      byte=0;
+    }
+    if(byte=='e'){
+      closeStbs();
+      Serial.println("Open stablizers");
       byte=0;
     }
     if(byte=='w'){
@@ -93,14 +118,14 @@ void loop() {
         }
         byte=0;  
     }
-    if(byte=='c' && pos < 180){
+    if(byte=='x' && pos < 180){
       pos+=10;
       rot_servo.write(pos);
       Serial.println("Griper turns left : " + String(pos) + "°");
       delay(30);
       byte=0;
     }
-    if(byte=='v'&& pos> 0){
+    if(byte=='c'&& pos> 0){
       pos-=10;
       rot_servo.write(pos);
       Serial.println("Griper turns right : " + String(pos) + "°");

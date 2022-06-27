@@ -349,8 +349,8 @@ def do_update():
     data = ser.readline()
     data = data.decode("utf-8")
     data = data.split(",")
-    print(len(data))
-    if len(data) == 9:
+    print((data))
+    if len(data) == 8:
         Heartbeat = data[0]
         CO2= data[1]
         AmbientTemperature = data[2]
@@ -359,14 +359,14 @@ def do_update():
         Gyro_x = data[4]
         Gyro_y = data[5]
         Gyro_z = data[6]
-        Speed = data[7]
+
 
 
         canvas.itemconfig(Heartbeat_Text, text="Heartbeat sensor :      " + str(Heartbeat) + " BPM" +"\n")
         canvas.itemconfig(AmbientTemperature_Text, text="Ambient temperature :    " + str(AmbientTemperature) + " C" + "\n")
         canvas.itemconfig(BodyTemperature_Text, text="Body temperature  :      " + "-" +" C" + "\n")
-        canvas.itemconfig(Gyro_Text, text="Gyro(xyz axis)  :      " + str(Gyro_x) +", " +str(Gyro_y)+"," +str(Gyro_z) + "\n")
-        canvas.itemconfig(Speed_Text, text="Speed :      " + str(Speed) + " m/s" + "\n")
+        canvas.itemconfig(Gyro_Text, text="Gyro(xyz): " + str(Gyro_x) +"º, " +str(Gyro_y)+"º, " +str(Gyro_z) + "º\n")
+        canvas.itemconfig(Speed_Text, text="Speed :      " + str("-") + " m/s" + "\n")
         canvas.itemconfig(CO2Rate_Text, text="CO2 level :      " + str(CO2) +" ppm" "\n")
         canvas.itemconfig(AmbientHumidity_Text, text="Ambient Humidity :     " + str(AmbientHumidity) +" g.kg-1"+ "\n") 
 
@@ -384,7 +384,7 @@ def do_update():
         if float(CO2) > 600:
             canvas.itemconfig(CO2_Warning, text="Warning: CO2 level is high !" + "\n")
             play_ringtone()
-        elif float(CO2) < 400:
+        elif float(CO2) < 300:
             canvas.itemconfig(CO2_Warning, text="Warning: CO2 level is low !" + "\n")
             play_ringtone()
         else:
@@ -401,8 +401,8 @@ def do_update():
         #     canvas.itemconfig(TBody_Warning, text="\n")
         
 
-        if float(Gyro_x) > 15 or float(Gyro_x)<-15 or float(Gyro_y)>15 or float(Gyro_y)<-15 or float(Gyro_z)>90 or float(Gyro_z)<-90:
-            canvas.itemconfig(Gyro_Warning, text="Warning: The robot is not aligned or is spining" + "\n")
+        if float(Gyro_x) > 16 or float(Gyro_x)<-16 or float(Gyro_y)>16 or float(Gyro_y)<-16 :
+            canvas.itemconfig(Gyro_Warning, text="Warning: The robot is not aligned " + "\n")
             play_ringtone()
 
         else:
@@ -410,11 +410,6 @@ def do_update():
 
         
 
-        if float(Speed) > 1:
-            canvas.itemconfig(speed_Warning, text="Warning: The robot is going too fast" + "\n")
-            play_ringtone()
-        else:
-            canvas.itemconfig(speed_Warning, text="\n")
 
     window.after(1000, do_update)
             
